@@ -1,16 +1,25 @@
-import dash
-from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
-from aplicacao import aplicacao
-import plotly.express as px
-px.set_mapbox_access_token(open('pk.eyJ1IjoibWFyY2lvZWNuMjIiLCJhIjoiY2x2MmtzbTJnMGhpOTJqcGxzM2RrZHE5ZiJ9.V73G6bQtMUOxQlHU02oXJg').read())
+import dash_leaflet as dl
+from dash import Dash, html
 
+app = Dash()
 
-app = Dash(external_stylesheets=[dbc.themes.BOOTSTRAP],)
+app.layout = dbc.Container(
+    fluid=True,
+    children=[
+        dbc.Card(
+            id='card-map',
+            children=[
+            dl.Map(
+                dl.TileLayer(),
+                id='mapa',
+                center=[-29.9160182, -51.1795255],
+                zoom=13,
+                style={'height': '600px'})
+        ])
 
-app.layout = html.Div([
-    aplicacao()
-])
+    ]
+)
 
 # ! SERVIDOR
 if __name__ == "__main__":
@@ -21,8 +30,8 @@ if __name__ == "__main__":
         dev_tools_hot_reload=True,
         threaded=True,
     )
-    #app.run(
+    # app.run(
     #    host="0.0.0.0",
     #    port="8080",
     #    threaded=True,
-    #)
+    # )
