@@ -1,25 +1,46 @@
-import dash_bootstrap_components as dbc
-import dash_leaflet as dl
-from dash import Dash, html
+from dash import Dash, page_container
 
-app = Dash()
+from modulos.menu_lateral import *
 
-app.layout = dbc.Container(
-    fluid=True,
+app = Dash(external_stylesheets=[dbc.themes.SLATE], use_pages=True)
+
+# ! APP - LAYOUT
+app.layout = html.Div(
     children=[
-        dbc.Card(
-            id='card-map',
+        # ? MENU PRINCIPAL
+        dbc.Nav(
+            id="nav",
+            class_name="d-flex aligns-items-center justify-content-center text-center mx-auto p-2",
+            style={"background-color": "#040D12"},
             children=[
-            dl.Map(
-                dl.TileLayer(),
-                id='mapa',
-                center=[-29.9160182, -51.1795255],
-                zoom=13,
-                style={'height': '600px'})
-        ])
+                # / PÁGINA -> HOME
+                dbc.NavItem(
+                    children=[dbc.NavLink("Home", href="/", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Educação", href="/educacao", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Saúde", href="/saude", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Trânsito", href="/transito", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Finanças", href="/financas", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Economia", href="/economia", class_name="text-light")]
+                ),
+                dbc.NavItem(
+                    children=[dbc.NavLink("Eleições", href="/eleicoes", class_name="text-light")]
+                ),
+            ]),
+        # =============================================================================================== #
+        # ? LAYOUT
+        html.Div(children=[page_container], className="mt-4")
 
-    ]
-)
+    ])
 
 # ! SERVIDOR
 if __name__ == "__main__":
