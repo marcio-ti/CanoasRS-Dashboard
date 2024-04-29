@@ -3,35 +3,53 @@ import folium
 from folium.plugins import HeatMap
 
 
+
+
+
+
 def escolas_markers(mapa):
-    dados_escolas = pd.read_csv('dados/dados_escolas.csv', sep=';')
+    dados_escolas = pd.read_excel('dados/escolas.xlsx')
 
     for index, elemento in dados_escolas.iterrows():
-        # Obtenha o nome da escola (chave do dicionário)
         nome_escola = elemento['ESCOLA']
-
-        # Obtenha a latitude e longitude
         lat = elemento['LAT']
         long = elemento['LONG']
-        folium.Marker(
-            location=[lat, long], popup=nome_escola
-        ).add_to(mapa)
+        rede = elemento['REDE']
+
+        if pd.notnull(lat) and pd.notnull(long):
+            if rede == 'Municipal':
+                escola_municipal = folium.CustomIcon(
+                    icon_image='assets/icons/escola_municipal.png',
+                    icon_size=(25, 25)
+                )
+                folium.Marker(
+                    location=[lat, long], popup=nome_escola, icon=escola_municipal
+                ).add_to(mapa)
+            elif rede == 'Estadual':
+                escola_estadual = folium.CustomIcon(
+                    icon_image='assets/icons/escola_estadual.png',
+                    icon_size=(25, 25)
+                )
+                folium.Marker(
+                    location=[lat, long], popup=nome_escola, icon=escola_estadual
+                ).add_to(mapa)
 
     return mapa
 
 
+
 def escolas_heat(mapa):
-    dados_escolas = pd.read_csv('dados/dados_escolas.csv', sep=';')
+    dados_escolas = pd.read_excel('dados/escolas.xlsx')
 
     dados = []
     for index, elemento in dados_escolas.iterrows():
-        # Obtenha a latitude e longitude
         lat = elemento['LAT']
         long = elemento['LONG']
         valor = elemento['IDEB']
 
-        dados.append([lat, long, valor])
+        if pd.notnull(lat) and pd.notnull(long) and pd.notnull(valor):
+            dados.append([lat, long, valor])
 
-    mapa = HeatMap(dados).add_to(mapa)
+    HeatMap(dados).add_to(mapa)
 
     return mapa
